@@ -31,7 +31,8 @@ org_codes = [
     'sco', 'snd', 'spc', 'syn', 'tid', 'tmm', 'tth', 'vco', 'xfa', 'ype'
 ]
 
-delta_max = 3  # maximum number of genes/reactions that can be skipped
+delta_genes_max = 3  # maximum number of genes that can be skipped
+delta_reactions_max = 3  # maximum number of reactions that can be skipped
 
 # This is the directory where metabolic pathways are stored. For each of the
 # species in the list 'org_codes', a subdirectory with the same name (three- or
@@ -106,8 +107,8 @@ def run_CoMetGeNe():
     pool = multiprocessing.Pool(multiprocessing.cpu_count())
     create_directory(results_dir)
 
-    for delta_G in range(0, delta_max + 1):
-        for delta_D in range(0, delta_max + 1):
+    for delta_G in range(0, delta_genes_max + 1):
+        for delta_D in range(0, delta_reactions_max + 1):
             for org in org_codes:
                 output = os.path.join(
                     results_dir,
