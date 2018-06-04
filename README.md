@@ -64,7 +64,7 @@ path_eco00564.kgml: Skipped genes: eco:b3823, eco:b3822
 * The four lines with entities separated by arrows (`->`) represent the trail `R02054 -> R02053 -> R03416` in four distinct manners, using:
   * the KGML identifiers of the reactions in the trail (`110 -> 104 -> 123`).
   * the KEGG R numbers associated to the reactions in the trail (`R02054 -> R02053 -> R03416`). Span is computed in terms of distinct R numbers in the trail.
-  * the names of genes coding for the reactions in the trail (`eco:b3821 -> eco:b3821 -> eco:b3825`).
+  * the names of genes whose products are involved in reactions in the trail (`eco:b3821 -> eco:b3821 -> eco:b3825`).
   * the EC numbers associated to the reactions in the trail (`3.1.1.32 -> 3.1.1.4 -> 3.1.1.5`).
 * The reaction `R04864` was skipped (allowed because `CoMetGeNe.py` was executed with the option `-dD 1`): it is shown in square brackets, along with the corresponding KGML identifier (`139`), associated gene (`b2836`), and EC number (`2.3.1.40`).
 * Two genes were skipped (allowed because `CoMetGeNe.py` was executed with the option `-dG 2`): `eco:b3823` and `eco:b3822`.
