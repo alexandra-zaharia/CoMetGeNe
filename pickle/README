@@ -1,0 +1,64 @@
+################################################################################
+#
+#                  IMPORTANT: Do NOT remove this directory!
+#
+################################################################################
+
+
+CoMetGeNe trail finding (CoMetGeNe.py, CoMetGeNe_launcher.py) and trail grouping
+(grouping.py) require this directory in order to save the following five binary
+files:
+
+* grouping_reaction_sets.pickle               (created by grouping.py)
+* grouping_r_numbers.pickle                   (created by grouping.py)
+* grouping_species_object.pickle              (created by grouping.py)
+* kegg_ec_info.pickle         (created by CoMetGeNe.py or CoMetGeNe_launcher.py)
+* kegg_genome_info.pickle     (created by CoMetGeNe.py or CoMetGeNe_launcher.py)
+    
+These files are not human-readable, being created with the Python cPickle module 
+that allows 'dumping' the contents of a data structure to a binary file in order
+to speed up subsequent executions.
+    
+    
+Files created by CoMetGeNe.py or CoMetGeNe_launcher.py:
+
+    * kegg_ec_info.pickle contains EC number information retrieved from
+      http://rest.kegg.jp/link/reaction/enzyme. It associates EC numbers to 
+      R numbers (KEGG reaction identifiers). These associations are needed for
+      CoMetGeNe output files.
+      
+    * kegg_genome_info.pickle contains genomic information for every species 
+      analyzed. For any given species on which CoMetGeNe is executed, protein-
+      coding genes are stored in this file with their identifier, chromosome,
+      chromosome strand, and position on the chromosomal strand.
+
+      
+Files created by grouping.py:
+
+    * grouping_reaction_sets.pickle contains CoMetGeNe trails in the form of 
+      reaction sets.
+    
+    * grouping_r_numbers.pickle contains associations between R numbers, 
+      species, pathways, and gene identifiers of the given species.
+    
+    * grouping_species_object.pickle contains the order of genes on chromosomes
+      for every species analyzed.
+      
+
+--------------------------------------------------------------------------------
+
+           Important notice regarding trail grouping (grouping.py)
+         
+--------------------------------------------------------------------------------
+
+If trail grouping has been performed at least once, the grouping_*.pickle files
+are created. When performing trail grouping on a new dataset, a message is 
+displayed on stderr to inform you that the old grouping_*.pickle files do not 
+contain the required information. In this case, you can either delete or rename
+the old grouping_*.pickle files.
+
+If trail grouping still cannot be performed, it is because the 
+kegg_genome_info.pickle file does not contain (all) the new species. This can
+happen if you accidentally deleted this file after running CoMetGeNe.py or 
+CoMetGeNe_launcher.py. In this case, the file kegg_genome_info.pickle needs to
+be recreated. In order to do so, re-run CoMetGeNe.py or CoMetGeNe_launcher.py. 
