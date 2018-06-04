@@ -123,7 +123,7 @@ The CSV file contains a line for every gene of the reference species *S* involve
   * A cross (`x`) if *g* has an homologue in the other species that is a neighbor of at least one other gene involved in the trail;
   * A dot (`.`) if *g* has no such homologue.
 
-**Example:** Suppose trail finding was performed for species `aae`, `bbn`, `eco`, and `mpn`. A small part of the CSV obtained when grouping `CoMetGeNe` trails by genes for `eco` as the reference species is reproduced below (slightly re-formatted for better readability):
+**Example:** Suppose trail finding was performed for species `aae`, `bbn`, `eco`, and `mpn`. A small part of the CSV obtained when grouping `CoMetGeNe` trails by genes for `eco` as the reference species is reproduced below (slightly re-formatted for readability purposes):
 
 ```
 eco_gene;chr;str;aae;bbn;mpn
@@ -159,10 +159,10 @@ The CSV file contains a line for every reaction of the reference species *S* inv
   * A dot (`.`) if *r* is performed in species *S'* by the product of a gene that is not a neighbor of at least one other gene involved in the `CoMetGeNe` trail to which reaction *r* belongs.
   * A circle (`o`) if *r* is absent from species *S'*.
 
-**Example:** Suppose trail finding was performed for species `aae`, `bbn`, `eco`, and `mpn`. A small part of the CSV obtained when grouping `CoMetGeNe` trails by reactions for `eco` as the reference species is reproduced below (slightly re-formatted for better readability):
+**Example:** Suppose trail finding was performed for species `aae`, `bbn`, `eco`, and `mpn`. A small part of the CSV obtained when grouping `CoMetGeNe` trails by reactions for `eco` as the reference species is reproduced below (slightly re-formatted for readability purposes):
 
 ```
-reaction;eco_gene;pathway                      ;aae;bbn;mpn
+reaction;eco_gene;pathway;                      aae;bbn;mpn
 R07618;  b0116;   00010 00020 00280 00620 00640; . ; o ; x 
 R03270;  b0114;   00010 00020 00620;             o ; o ; x
 R00014;  b0114;   00010 00020 00620;             o ; o ; x
