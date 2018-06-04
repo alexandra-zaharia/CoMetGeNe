@@ -29,7 +29,7 @@ Roughly speaking, a **trail** is a path in a graph that can include repeated ver
 1. the genes involved in the reactions of *T* are neighbors, and
 1. no other trail *T'* passing trhough (*r<sub>i</sub>*, *r<sub>j</sub>*) such that the genes involved in reactions of *T'* are neighbors contains more unique reactions than *T*.
 
-Property 2 above is named **span**: the span of a trail *T* represents the number of unique reactions in *T*.
+Property 2 above refers to a concept termed **span**: the span of a trail *T* represents the number of unique reactions in *T*.
 
 Flexibility is allowed in the definition of neighborhood: `CoMetGeNe` is able to skip a few reactions and/or genes.
 
@@ -60,8 +60,8 @@ path_eco00564.kgml: Skipped genes: eco:b3823, eco:b3822
 ...
 ```
 
-* `path_eco00564.kgml` is the file name for the pathway map `00564` (glycerophospholipid metabolism) for `eco` in KGML format that `CoMetGeNe` automatically retrieved from KEGG.
-* The four lines with entities separated by arrows (`->`) represent the trail `R00230 -> R00228` in four distinct manners, using:
+* `path_eco00564.kgml` is the file name for the pathway map `00564` in `eco` (glycerophospholipid metabolism), retrieved automatically from KEGG by `CoMetGeNe`.
+* The four lines with entities separated by arrows (`->`) represent the trail `R02054 -> R02053 -> R03416` in four distinct manners, using:
   * the KGML identifiers of the reactions in the trail (`110 -> 104 -> 123`).
   * the KEGG R numbers associated to the reactions in the trail (`R02054 -> R02053 -> R03416`). Span is computed in terms of distinct R numbers in the trail.
   * the names of genes coding for the reactions in the trail (`eco:b3821 -> eco:b3821 -> eco:b3825`).
@@ -91,7 +91,7 @@ Given a reference species *S* among the ones for which trail grouping has been p
 
 ### Note regarding directory structure
 
-In order to perform trail grouping, the metabolic pathway maps of all species in the data set need to be stored in KGML format in a single directory with subdirectories for every species. The subdirectories names need to be the three- or four-letter KEGG codes for the species in question. For example, a correct directory structure can look like this:
+In order to perform trail grouping, the metabolic pathway maps of all species in the data set need to be stored in KGML format in a single directory with subdirectories for every species. The subdirectory names need to be the three- or four-letter KEGG codes for the species in question. For example, a correct directory structure can look like this:
 
 ```
 data/bsu/path_aae00010.kgml, path_aae00020.kgml, ...
@@ -100,7 +100,7 @@ data/eco/path_eco00010.kgml, path_eco00020.kgml, ...
 data/ype/path_mpn00010.kgml, path_mpn00020.kgml, ...
 ```
 
-It is important to preserve this type of directory structure if you launch `CoMetGeNe.py` directly; in case `CoMetGeNe_launcher.py` was used, this particular directory structure is ensured. 
+It is important to preserve this type of directory structure if `CoMetGeNe.py` is launched directly; in case `CoMetGeNe_launcher.py` was used, this particular directory structure is ensured. 
 
 ### Genomic conservation patterns (grouping by genes)
 
@@ -117,10 +117,10 @@ This results in detecting genomic conservation patterns (trail grouping by `gene
 The CSV file contains a line for every gene of the reference species *S* involved in `CoMetGeNe` trails of *S* that are common to *S* and at least one other species from the dataset. Groups of neighboring genes in *S* involved in `CoMetGeNe` trails of *S* are separated by the line `***`. In this CSV file, the line for a gene *g* of *S* contains:
 
 * The name of gene *g*.
-* The name of the chromosome on which the gene is located.
-* The strand on the chromosome on which the gene is located (`+` for the positive strand, `-` for the negative strand).
+* The name of the chromosome on which *g* is located.
+* The strand on the chromosome on which *g* is located (`+` for the positive strand, `-` for the negative strand).
 * A column for every other species in the data set that can take either of the following values:
-  * A cross (`x`) if *g* has a homologue in the other species that is a neighbor of at least one other gene involved in the trail;
+  * A cross (`x`) if *g* has an homologue in the other species that is a neighbor of at least one other gene involved in the trail;
   * A dot (`.`) if *g* has no such homologue.
 
 **Example:** Suppose trail finding was performed for species `aae`, `bbn`, `eco`, and `mpn`. A small part of the CSV obtained when grouping `CoMetGeNe` trails by genes for `eco` as the reference species is reproduced below (slightly re-formatted for better readability):
@@ -135,7 +135,7 @@ From the table above, it can be seen that:
 
 * Species `aae` has at least two neighboring homologues to the gene `b0116` in `eco`;
 * Species `bbn` has no neighboring homologues for the three genes in `eco`;
-* Species `mpn` has neighboring homologues for all the three genes in `eco.
+* Species `mpn` has neighboring homologues for all the three genes in `eco`.
 
 ### Metabolic conserveration patterns (grouping by reactions)
 
@@ -155,8 +155,8 @@ The CSV file contains a line for every reaction of the reference species *S* inv
 * The gene name(s) of the gene(s) of *S* involved in reaction *r*.
 * The KEGG pathway map ID(s) for the pathway(s) in which the R number associated to *r* occurs.
 * A column for every other species *S'* in the data set that can take one of the three following values:
-  * A cross (`x`) if *r* is performed by species *S'* by the product of at least one gene neighboring at least one other gene involved in the `CoMetGeNe` trail to which reaction *r* belongs;
-  * A dot (`.`) if *r* is performed by species *S'* by the product of a gene that is not a neighbour of at least one other gene involved in the `CoMetGeNe` trail to which reaction *r* belongs.
+  * A cross (`x`) if *r* is performed in species *S'* by the product of at least one gene neighboring at least one other gene involved in the `CoMetGeNe` trail to which reaction *r* belongs;
+  * A dot (`.`) if *r* is performed in species *S'* by the product of a gene that is not a neighbor of at least one other gene involved in the `CoMetGeNe` trail to which reaction *r* belongs.
   * A circle (`o`) if *r* is absent from species *S'*.
 
 **Example:** Suppose trail finding was performed for species `aae`, `bbn`, `eco`, and `mpn`. A small part of the CSV obtained when grouping `CoMetGeNe` trails by reactions for `eco` as the reference species is reproduced below (slightly re-formatted for better readability):
@@ -171,7 +171,7 @@ R02569;  b0115;   00010 00020 00620;             o ; o ; x
 
 From the table above, it can be seen that:
 
-* Species `aae` performs only reaction `R07618` but no the three others;
+* Species `aae` performs only reaction `R07618` but none of the three other reactions;
 * Species `bbn` performs none of the four reactions;
 * Species `mpn` performs all four reactions using products of neighboring genes.
 
