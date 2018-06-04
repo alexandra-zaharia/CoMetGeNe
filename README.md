@@ -16,7 +16,7 @@ It is well-known that neighboring reactions corresponding to neighboring genes u
 `CoMetGeNe` is an exploration tool for conserved organizational motifs at both the metabolic and genomic level:
 
 * In a first step named **trail finding**, `CoMetGeNe` detects chains of metabolic reactions for a given species that are catalyzed by products of neighboring genes.
-* In a second (and optional) step named **trail grouping**, `CoMetGeNe` compares results for several species in order to identify conserved metabolic and genomic patterns. This step allows to answer specific questions such as *Which genes involved in peptidoglycan biosynthesis are neighbors in the bacterial species in my data set?* or more general questions such as *Which reactions are generally performed by enzymes encoded by neighboring genes?*
+* In a second (and optional) step named **trail grouping**, `CoMetGeNe` compares results for several species in order to identify conserved metabolic and genomic patterns. This step allows to answer specific questions such as *Which genes involved in the biosynthesis of peptidoglycan are neighbors in the bacterial species in my data set?* or more general questions such as *Which reactions are generally performed by enzymes encoded by neighboring genes?*
 
 `CoMetGeNe` automatically retrieves metabolic pathway maps and genomic information for the species of your choice from the [KEGG](https://www.kegg.jp) (Kyoto Encyclopedia of Genes and Genomes) knowledge base. `CoMetGeNe` usage is as simple as telling it on which query species to run. In order to do so, one simply determines the three- or four-letters KEGG code for the target organism from the KEGG [catalog](https://www.genome.jp/kegg/catalog/org_list.html) of complete genomes.
 
