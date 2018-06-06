@@ -13,7 +13,7 @@ It is well-known that neighboring reactions corresponding to neighboring genes u
 
 ## What is `CoMetGeNe`?
 
-`CoMetGeNe` is an exploration tool for conserved organizational motifs at both the metabolic and genomic level:
+`CoMetGeNe` is an exploration tool for conserved organizational motifs at both the metabolic and genomic levels:
 
 * In a first step named **trail finding**, `CoMetGeNe` detects chains of metabolic reactions for a given species that are catalyzed by products of neighboring genes.
 * In a second (and optional) step named **trail grouping**, `CoMetGeNe` compares trail finding results for several species in order to identify conserved metabolic and genomic patterns. This step allows to answer specific questions such as *Which genes involved in the biosynthesis of peptidoglycan are neighbors in the bacterial species in my data set?* or more general questions such as *Which reactions are generally performed by enzymes encoded by neighboring genes?*
