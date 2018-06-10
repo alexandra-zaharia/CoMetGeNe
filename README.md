@@ -3,7 +3,7 @@ A bioinformatics tool for the exploration of **Co**nserved **Met**abolic and **G
 
 Project website: [cometgene.lri.fr](https://cometgene.lri.fr)
 
-Publication (in preparation): Zaharia, Labedan, Froidevaux, Denise. CoMetGeNe: mining conserved neighborhood patterns in metabolic and genomic contexts. *BMC Bioinformatics*. 2018 
+Publication (in preparation): Zaharia, Labedan, Froidevaux, Denise. CoMetGeNe: mining conserved neighborhood patterns in metabolic and genomic contexts. 2018 
 
 ## Background
 
