@@ -183,3 +183,7 @@ From the table above, it can be seen that:
 * [NetworkX](https://networkx.github.io) (Python library)
 * Active internet connection (necessary for automatic data retrieval from KEGG)
 * Multi-core CPU (recommended)
+
+## License 
+
+The `CoMetGeNe` software is available under the MIT license.
