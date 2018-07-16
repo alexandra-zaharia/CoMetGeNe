@@ -29,8 +29,8 @@ def parse_cmd_arguments():
 
     :return: command-line arguments for trail grouping
     """
-    desc = 'Groups CoMetGeNe trails by either genes or reactions, producing ' \
-        'a CSV file.'
+    desc = 'Groups CoMetGeNe trails by either genes or reactions, optionally ' \
+        'producing a CSV file.'
     example = \
         '''
 KGML needs to contain a subdirectory for every species for which a result file 
@@ -45,8 +45,7 @@ Example: running
     
 will perform trail grouping by genes for the reference species 'eco'. The 
 CoMetGeNe results are stored in 'results/', and the KGML files are available in
-'data/'.
-A CSV file is produced ('grouping_gene_eco.csv').
+'data/'. A CSV file is produced ('grouping_gene_eco.csv').
         '''
 
     parser = argparse.ArgumentParser(
