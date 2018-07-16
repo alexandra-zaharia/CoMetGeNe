@@ -17,7 +17,7 @@ def parse_cmd_arguments():
     desc = \
         '''
 Determines maximum trails of reactions for the specified organisms such that the 
-genes encoding for the enzymes involved in the trails are neighbors.
+genes encoding the enzymes involved in the trails are neighbors.
 
 A trail of reactions is a sequence of reactions that can repeat reactions 
 (vertices), but not arcs between reactions.
