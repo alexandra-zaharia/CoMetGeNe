@@ -17,13 +17,13 @@ def parse_cmd_arguments():
     desc = \
         '''
 Determines maximum trails of reactions for the specified organisms such that the 
-genes coding for the enzymes involved in the trail are neighbors.
+genes encoding for the enzymes involved in the trails are neighbors.
 
 A trail of reactions is a sequence of reactions that can repeat reactions 
 (vertices), but not arcs between reactions.
 
-Metabolic pathways and genomic information is automatically retrieved from the 
-KEGG database.
+Metabolic pathways and genomic information are automatically retrieved from the 
+KEGG knowledge base.
         '''
     example = \
         '''
