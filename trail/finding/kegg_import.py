@@ -229,8 +229,12 @@ def extract_gene_info(gene_info, org, genomes):
 
     pos_info = ''
     for entry in gene_info:
-        if entry.split()[0] == 'POSITION':
+        if entry.split()[0] == 'PATHWAY':
+            genomes[org][gene]['enzyme'] = True
+        elif entry.split()[0] == 'POSITION':
             pos_info = entry.split()[1]
+            if 'enzyme' not in genomes[org][gene]:
+                genomes[org][gene]['enzyme'] = False
             break
     assert len(pos_info) > 0
 
