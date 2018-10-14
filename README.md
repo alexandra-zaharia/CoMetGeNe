@@ -1,4 +1,7 @@
 # CoMetGeNe
+
+[![CoMetGeNe logo](https://cometgene.lri.fr/images/logo_CoMetGeNe_green.png)](https://cometgene.lri.fr)
+
 A bioinformatics tool for the exploration of **Co**nserved **Met**abolic and **Ge**nomic **Ne**ighborhoods
 
 Project website: [cometgene.lri.fr](https://cometgene.lri.fr)
