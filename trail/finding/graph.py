@@ -71,6 +71,11 @@ def build_gene_graph(gene_data, chromosomes):
         for genes in genes_fwd, genes_rev:
             for i in range(1, len(genes)):
                 G.add_edge(genes[i], genes[i-1])
+            if len(gene_data[genes[-1]]['pos']) > 1:
+                start = gene_data[genes[-1]]['pos'][0][0]
+                end = gene_data[genes[-1]]['pos'][-1][1]
+                if start > end:
+                    G.add_edge(genes[0], genes[-1])
 
     return G
 
