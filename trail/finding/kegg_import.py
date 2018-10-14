@@ -278,7 +278,7 @@ def retrieve_gene_info(genes, organism, genomes):
 
     indices = [i for i, x in enumerate(data) if x == "///"]
 
-    if len(indices) == 0:
+    if len(indices) == 0 or len(indices) == 1:
         extract_gene_info(data, organism, genomes)
     else:
         for i in range(len(indices) - 1):
