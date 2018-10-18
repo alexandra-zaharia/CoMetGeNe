@@ -207,11 +207,92 @@ def get_slices(data, slice_size):
     return slices
 
 
+def _remove_complement(position):
+    if 'complement' in position:
+        position = position.replace('complement(', '')
+        position = position[:-2]  # remove final closing bracket
+    return position
+
+
+def _get_position(position):
+    """Returns the numerical position contained within the string 'position'.
+    
+    :param position: string containing a position, e.g. '1000', or a position 
+        range, e.g. '1000..2000'
+    :return: -1 if positional information is invalid, or one or two integers
+        deisgnating the position otherwise
+    """
+    position = _remove_complement(position)
+    
+    if position.isdigit():
+        return int(position)
+
+    if ',' in position or '..' not in position:
+        return -1
+    
+    start, end = position.split('..')
+    if not start.isdigit() or not end.isdigit():
+        return -1
+
+    return int(start), int(end)
+
+
+def _get_position_when_join_present(position):
+    """Returns the list of integers corresponding to the string 'position', if
+    the keyword 'join' is present.
+    
+    Examples: 
+        for 'join(1000..2000,3000..4000)', return [(1000, 2000), (3000, 4000)]
+        for 'join(5000,6000..7000)', return [(5000, 7000)]
+        for 'join(8000..9000,10000)', return [(8000, 10000)]
+        for 'join(<8000..9000, 10000)', return [-1]
+    
+    :param position: string containing the keyword 'join' and positional 
+        informaiton
+    :return: list of integer tuples corresponding to 'positions', or list 
+        [-1] if positional information is invalid
+    """
+    position = _remove_complement(position)
+    position = position.replace('join(', '').replace(')', '')
+        
+    if ',' not in position:  # invalid positional information
+        return [-1] 
+    
+    pos_fields = position.split(',')
+    pos_int = [_get_position(field) for field in pos_fields]
+    
+    if -1 in pos_int:  # invalid positional information
+        return [-1]
+    
+    unique_pos = [pos for pos in pos_int if type(pos) is not tuple]    
+    if len(unique_pos) == 0:
+        return pos_int
+    else:
+        pos_list = list()
+        
+        assert len(unique_pos) == 1
+        index = pos_int.index(unique_pos[0])
+        
+        for i in range(len(pos_int)):
+            if i != index:
+                if i == index + 1:
+                    assert pos_int[index] < pos_int[i][1]
+                    pos_list.append((pos_int[index], pos_int[i][1]))
+                elif i == index - 1:
+                    assert pos_int[index] > pos_int[i][0]
+                    pos_list.append((pos_int[i][0], pos_int[index]))
+                else:
+                    pos_list.append(pos_int[i])
+                    
+        return pos_list
+                
+
 def extract_gene_info(gene_info, org, genomes):
     """Stores information on a given protein-coding gene of species 'org' in the
     dict 'genomes'.
 
-    The 'genomes' dict is modified unless 'gene_info' does not designate a CDS.
+    The 'genomes' dict is modified if 'gene_info' designates a CDS with valid
+    positional information.
 
     :param gene_info: textual information on a gene entry for species 'org', as
         retrieved from KEGG GENES
@@ -225,37 +306,42 @@ def extract_gene_info(gene_info, org, genomes):
         return
 
     gene = org + ':' + gene_info[0].split()[1]
-    genomes[org][gene] = dict()
-
+    gene_dict = dict()
+    
     pos_info = ''
     for entry in gene_info:
         if entry.split()[0] == 'PATHWAY':
-            genomes[org][gene]['enzyme'] = True
+            gene_dict['enzyme'] = True
         elif entry.split()[0] == 'POSITION':
             pos_info = entry.split()[1]
-            if 'enzyme' not in genomes[org][gene]:
-                genomes[org][gene]['enzyme'] = False
+            if 'enzyme' not in gene_dict:  # assumes POSITION is after PATHWAY
+                gene_dict['enzyme'] = False
             break
-    assert len(pos_info) > 0
+    if len(pos_info) == 0:
+        sys.stderr.write('Ignoring gene %s (no positional information)\n' %
+                         gene)
+        return
 
     fields = pos_info.split(':')
-    if len(fields) == 1:  # Only one chromosome.
-        genomes[org][gene]['chr'] = 'chromosome'
+    if len(fields) == 1:  # only one chromosome
+        gene_dict['chr'] = 'chromosome'
         pos = 0
     else:
-        genomes[org][gene]['chr'] = 'chromosome ' + fields[0]
+        gene_dict['chr'] = 'chromosome ' + fields[0]
         pos = 1
-    genomes[org][gene]['fwd'] = False if 'complement' in fields[pos] else True
+    gene_dict['fwd'] = False if 'complement' in fields[pos] else True
 
-    genomes[org][gene]['pos'] = list()
-    positions = fields[pos].split(',')
-    for position in positions:
-        pos_match = re.search('(\d+).*\.\..*(\d+)', position)
-        assert pos_match
-        start, end = pos_match.group().split('..')
-        start = int(re.search('(\d+)', start).group())
-        end = int(re.search('(\d+)', end).group())
-        genomes[org][gene]['pos'].append((start, end))
+    gene_dict['pos'] = list()
+    if 'join' in fields[pos]:
+        gene_dict['pos'] = _get_position_when_join_present(fields[pos])
+    else:
+        gene_dict['pos'].append(_get_position(fields[pos]))
+        
+    if -1 in gene_dict['pos']:
+        sys.stderr.write('Ignoring gene %s (invalid positional information)\n' %
+                         gene)
+    else:
+        genomes[org][gene] = gene_dict
 
 
 def retrieve_gene_info(genes, organism, genomes):
@@ -273,7 +359,8 @@ def retrieve_gene_info(genes, organism, genomes):
         the gene is located, the strand on the chromosome, as well as the
         position of the gene on the chromosome (in nucleotides)
     """
-    query_url = 'http://rest.kegg.jp/get/' + '+'.join(genes)
+    query_url = 'http://rest.kegg.jp/get/' + '+'.join(genes)  
+
     data = urllib2.urlopen(query_url).read().split('\n')
 
     indices = [i for i, x in enumerate(data) if x == "///"]
