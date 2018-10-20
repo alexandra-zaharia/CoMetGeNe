@@ -1,7 +1,7 @@
 """
 These utilities handle graphs.
 
-Version: 1.0 (May 2018)
+Version: 1.1 (October 2018)
 License: MIT
 Author: Alexandra Zaharia (contact@alexandra-zaharia.org)
 """
