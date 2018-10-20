@@ -1,7 +1,7 @@
 """
 Handles data retrieval from KEGG.
 
-Version: 1.0 (May 2018)
+Version: 1.1 (October 2018)
 License: MIT
 Author: Alexandra Zaharia (contact@alexandra-zaharia.org)
 """
@@ -13,7 +13,7 @@ import re
 from CoMetGeNeError import CoMetGeNeError
 from os.path import exists, isdir, basename
 
-from ..definitions import PICKLE_EC
+from ..definitions import PICKLE_EC, PICKLE_GENOME
 from ..utils import pickle, unpickle
 
 
@@ -378,7 +378,7 @@ def retrieve_gene_info(genes, organism, genomes):
                 data[(indices[i] + 1):indices[i + 1]], organism, genomes)
 
 
-def retrieve_genome_info(organism, genomes=None):
+def retrieve_genome_info(organism, genomes=None, lock=None):
     """If species 'organism' is not present in the dict 'genomes' storing gene
     information for several species, retrieves all genomic information from
     KEGG GENES and stores it in the dict 'genomes'.
@@ -395,6 +395,8 @@ def retrieve_genome_info(organism, genomes=None):
         every species in the dict, namely the name of the chromosome on which
         the gene is located, the strand on the chromosome, as well as the
         position of the gene on the chromosome (in nucleotides)
+    :param lock: multiprocessing lock to prevent processes reading from and 
+        writing to the genomes pickle file simultaneously
     :return: the species for which genomic information has been retrieved
         ('organism') and the associated genomic information
     """
@@ -426,5 +428,12 @@ def retrieve_genome_info(organism, genomes=None):
     except urllib2.URLError:
         fmt_msg = "\n%s: HTTP download error\n" % os.path.basename(__file__)
         sys.stderr.write(fmt_msg)
+
+    if lock is not None:
+        lock.acquire()
+        genomes = unpickle(PICKLE_GENOME)
+        genomes[organism] = genes_dict[organism]
+        pickle(PICKLE_GENOME, genomes)
+        lock.release()
 
     return organism, genes_dict[organism]

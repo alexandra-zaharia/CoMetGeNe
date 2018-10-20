@@ -4,7 +4,7 @@
 This script allows parallel execution of CoMetGeNe.py, especially useful when
 performing trail finding for a large number of species.
 
-Version: 1.0 (May 2018)
+Version: 1.1 (October 2018)
 License: MIT
 Author: Alexandra Zaharia (contact@alexandra-zaharia.org)
 """
@@ -87,14 +87,15 @@ def retrieve_genomes(genomes):
     """
     pool = multiprocessing.Pool(
         min(kegg_max_thr_gen, len(org_codes), multiprocessing.cpu_count()))
+    manager = multiprocessing.Manager()
+    lock = manager.Lock()
 
-    results = [pool.apply_async(retrieve_genome_info, (org, genomes,))
-               for org in org_codes if org not in genomes]
+    for org in org_codes:
+        if org not in genomes:
+            pool.apply_async(retrieve_genome_info, (org, None, lock,))
 
     pool.close()
     pool.join()
-
-    return [result.get() for result in results]
 
 
 def run_CoMetGeNe():
@@ -146,12 +147,8 @@ def main():
     else:
         genomes = unpickle(PICKLE_GENOME)
 
-    results = retrieve_genomes(genomes)
-    for organism, genes_dict in results:
-        genomes[organism] = dict()
-        genomes[organism] = genes_dict
-    pickle(PICKLE_GENOME, genomes)
-
+    retrieve_genomes(genomes)
+    
     retrieve_ec_numbers()
 
     run_CoMetGeNe()
