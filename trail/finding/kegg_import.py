@@ -435,5 +435,3 @@ def retrieve_genome_info(organism, genomes=None, lock=None):
         genomes[organism] = genes_dict[organism]
         pickle(PICKLE_GENOME, genomes)
         lock.release()
-
-    return organism, genes_dict[organism]
