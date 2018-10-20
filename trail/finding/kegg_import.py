@@ -274,16 +274,19 @@ def _get_position_when_join_present(position):
         index = pos_int.index(unique_pos[0])
         
         for i in range(len(pos_int)):
-            if i != index:
-                if i == index + 1:
-                    assert pos_int[index] < pos_int[i][1]
-                    pos_list.append((pos_int[index], pos_int[i][1]))
-                elif i == index - 1:
-                    assert pos_int[index] > pos_int[i][0]
-                    pos_list.append((pos_int[i][0], pos_int[index]))
-                else:
-                    pos_list.append(pos_int[i])
-                    
+            if i == index:
+                continue
+            if i == index + 1:
+                if pos_int[index] >= pos_int[i][1]:
+                    return [-1]
+                pos_list.append((pos_int[index], pos_int[i][1]))
+            elif i == index - 1:
+                if pos_int[index] <= pos_int[i][0]:
+                    return [-1]
+                pos_list.append((pos_int[i][0], pos_int[index]))
+            else:
+                pos_list.append(pos_int[i])
+
         return pos_list
                 
 
