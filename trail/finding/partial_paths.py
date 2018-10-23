@@ -58,12 +58,12 @@ def partial_paths(LD, access, cache, reactions):
     if cond is None:
         cache[C] = dict()
         cond = C
-    for x in C.nodes():
+    for x in range(C.number_of_nodes()):
         if x not in cache[cond]:
             cache[cond][x] = dict()
 
     if len(C.nodes()) == 1:
-        c_node = C.nodes()[0]
+        c_node = 0
         for src in LD.nodes():
             for dst in LD.nodes():
                 if src == dst:
@@ -74,7 +74,7 @@ def partial_paths(LD, access, cache, reactions):
                         evaluate_path(
                             path, None, None, cache[cond][c_node], reactions)
     else:
-        for x in C.nodes():
+        for x in range(C.number_of_nodes()):
             scc_x = nx.subgraph(LD, C.node[x]['members'])
             partial_paths_helper(x, scc_x, access, cache[cond][x], reactions)
 

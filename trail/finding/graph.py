@@ -103,7 +103,7 @@ def add_edges_to_G(G_init, reactions, delta_G=0):
             if gene in G_init_nodes:
                 involved.add(gene)
             
-    G = nx.subgraph(G_init, list(involved))
+    G = nx.Graph(nx.subgraph(G_init, list(involved)))
 
     if delta_G < 0:
         delta_G = 0
@@ -121,7 +121,7 @@ def add_edges_to_G(G_init, reactions, delta_G=0):
                     skipped = path[(path.index(src)+1):path.index(dst)]
                     if 0 < len(skipped) <= delta_G:
                         G.add_edge(src, dst)
-                        G.edge[src][dst]['skipped'] = skipped
+                        G[src][dst]['skipped'] = skipped
 
     return G
 
@@ -145,14 +145,14 @@ def add_edges_to_D(D_init, delta_D=0):
 
     # Newly added arcs are labeled with the list of skipped vertices in D_init.
     if delta_D > 0:
-        spl_D = nx.shortest_path_length(D_init)
+        spl_D = dict(nx.shortest_path_length(D_init))
         for src in spl_D.keys():
             for dst in spl_D[src]:
                 if src != dst and (src, dst) not in D.edges():
                     if spl_D[src][dst] <= delta_D + 1:
                         path = nx.shortest_path(D_init, src, dst)
                         D.add_edge(src, dst)
-                        D.edge[src][dst]['skipped'] = \
+                        D[src][dst]['skipped'] = \
                             path[(path.index(src)+1):path.index(dst)]
 
     return D
@@ -232,9 +232,9 @@ def get_HNet_G(reactions, D_init, G_tmp):
                     if r_id1 != r_id2:
                         G.add_edge(r_id1, r_id2)
                         # Preserve information on skipped vertices.
-                        if 'skipped' in G_tmp.edge[enzyme1][enzyme2]:
-                            G.edge[r_id1][r_id2]['skipped'] = \
-                                G_tmp.edge[enzyme1][enzyme2]['skipped']
+                        if 'skipped' in G_tmp[enzyme1][enzyme2]:
+                            G[r_id1][r_id2]['skipped'] = \
+                                G_tmp[enzyme1][enzyme2]['skipped']
 
     return G
 

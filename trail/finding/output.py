@@ -76,12 +76,12 @@ def format_trail_helper_id(trail, D):
 
         skipped = False
         if i > 0:
-            if 'skipped' in D.edge[trail[i - 1]][trail[i]]:
+            if 'skipped' in D[trail[i - 1]][trail[i]]:
                 skipped = True
 
         if skipped:
             string += '['
-            skipped_vertices = D.edge[trail[i - 1]][trail[i]]['skipped']
+            skipped_vertices = D[trail[i - 1]][trail[i]]['skipped']
             for j in range(len(skipped_vertices)):
                 string += skipped_vertices[j]
                 if j < len(skipped_vertices) - 1:
@@ -113,12 +113,12 @@ def format_trail_helper_rn(trail, D, reactions):
 
         skipped = False
         if i > 0:
-            if 'skipped' in D.edge[trail[i - 1]][trail[i]]:
+            if 'skipped' in D[trail[i - 1]][trail[i]]:
                 skipped = True
 
         if skipped:
             string += '['
-            skipped_vertices = D.edge[trail[i - 1]][trail[i]]['skipped']
+            skipped_vertices = D[trail[i - 1]][trail[i]]['skipped']
             for j in range(len(skipped_vertices)):
                 r_skipped_list = [
                     r.replace('rn:', '') for r in
@@ -168,12 +168,12 @@ def format_trail_helper_en(trail, D, reactions):
 
         skipped = False
         if i > 0:
-            if 'skipped' in D.edge[trail[i - 1]][trail[i]]:
+            if 'skipped' in D[trail[i - 1]][trail[i]]:    
                 skipped = True
 
         if skipped:
             string += '['
-            skipped_vertices = D.edge[trail[i - 1]][trail[i]]['skipped']
+            skipped_vertices = D[trail[i - 1]][trail[i]]['skipped']
             for j in range(len(skipped_vertices)):
                 e_skipped_path = \
                     ', '.join(reactions[skipped_vertices[j]]['enzyme'])
@@ -217,12 +217,12 @@ def format_trail_helper_ec(trail, D, reactions):
 
         skipped = False
         if i > 0:
-            if 'skipped' in D.edge[trail[i - 1]][trail[i]]:
+            if 'skipped' in D[trail[i - 1]][trail[i]]:
                 skipped = True
 
         if skipped:
             string += '['
-            skipped_vertices = D.edge[trail[i - 1]][trail[i]]['skipped']
+            skipped_vertices = D[trail[i - 1]][trail[i]]['skipped']
             for j in range(len(skipped_vertices)):
                 if len(reactions[skipped_vertices[j]]['ec']) > 0:
                     e_skipped_path = \
@@ -308,12 +308,11 @@ def format_skipped_G(trail, reactions, G):
         for gene in reactions[r_id]['enzyme']:
             involved.add(gene)
 
-    for v1 in G_sub.edge:
-        for v2 in G_sub.edge[v1]:
-            if 'skipped' in G_sub.edge[v1][v2]:
-                for vertex in G_sub.edge[v1][v2]['skipped']:
-                    if vertex not in involved:
-                        skipped.add(vertex)
+    for v1, v2 in G_sub.edges():
+        if 'skipped' in G_sub[v1][v2]:
+            for vertex in G_sub[v1][v2]['skipped']:
+                if vertex not in involved:
+                    skipped.add(vertex)
 
     return ', '.join(str(skipped_vertex) for skipped_vertex in skipped)
 
@@ -335,12 +334,11 @@ def has_skipped_vertices_G(trail, reactions, G):
             involved.add(gene)
 
     G_sub = nx.subgraph(G, trail)
-    for v1 in G_sub.edge:
-        for v2 in G_sub.edge[v1]:
-            if 'skipped' in G_sub.edge[v1][v2]:
-                for vertex in G_sub.edge[v1][v2]['skipped']:
-                    if vertex not in involved:
-                        return True
+    for v1, v2 in G_sub.edges():
+        if 'skipped' in G_sub[v1][v2]:
+            for vertex in G_sub[v1][v2]['skipped']:
+                if vertex not in involved:
+                    return True
 
     return False
 
@@ -355,7 +353,7 @@ def has_skipped_vertices_D(trail, D):
         reaction, False otherwise
     """
     for i in range(1, len(trail)):
-        if 'skipped' in D.edge[trail[i-1]][trail[i]]:
+        if 'skipped' in D[trail[i - 1]][trail[i]]:
             return True
 
     return False
