@@ -1,0 +1,20 @@
+================================================================================
+Changes in CoMetGeNe version 1.1
+================================================================================
+
+* Enzyme-coding information is retrieved from KEGG (may be used for statistics).
+* Fixed gene retrieval bug where a gene would not be retrieved from KEGG if it
+  was the only gene in a download batch.
+* Circular chromosomes are now handled.
+* Added positional information checks for genes. If a CDS has no position or has
+  an invalid position, the CDS in question is ignored (as it is not possible to
+  know what rank it has on a given chromosome).
+* Genomic information is now pickled incrementally (as soon as genomic 
+  information has been downloaded for a given species). This is accomplished by
+  using a multiprocessing lock by threads wanting to write in the pickle file.
+* CoMetGeNe v1.1 is now compatible with NetworkX 2.2. Fixes include rewriting 
+  NetworkX 1.10 and 1.11 'edge' and 'node' attributes such that they are also 
+  understood by NetworkX 2.2, and creating new Graph or DiGraph objects for 
+  induced subgraphs (in NetworkX 1.10 and 1.11, these subgraphs could be 
+  edited, whereas in 2.2 they are frozen).
+
