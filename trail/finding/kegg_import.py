@@ -431,7 +431,10 @@ def retrieve_genome_info(organism, genomes=None, lock=None):
 
     if lock is not None:
         lock.acquire()
-        genomes = unpickle(PICKLE_GENOME)
+        if os.path.exists(PICKLE_GENOME):
+            genomes = unpickle(PICKLE_GENOME)
+        else:
+            genomes = dict()
         genomes[organism] = genes_dict[organism]
         pickle(PICKLE_GENOME, genomes)
         lock.release()
