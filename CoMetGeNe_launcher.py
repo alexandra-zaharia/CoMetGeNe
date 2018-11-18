@@ -54,6 +54,9 @@ kegg_max_thr_pw = 3
 # accepted.
 kegg_max_thr_gen = 2
 
+# This is the number of threads on which CoMetGeNe is ran (by default, the 
+# maximum number of available threads).
+n_thr_cometgene = multiprocessing.cpu_count()
 
 ################################################################################
 #               CoMetGeNe launcher script for parallel execution
@@ -105,7 +108,7 @@ def run_CoMetGeNe():
     The gap parameters specify how many genes (delta_G) and reactions (delta_D)
     can be skipped.
     """
-    pool = multiprocessing.Pool(multiprocessing.cpu_count())
+    pool = multiprocessing.Pool(n_thr_cometgene)
     create_directory(results_dir)
 
     for delta_G in range(0, delta_genes_max + 1):
@@ -156,3 +159,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
