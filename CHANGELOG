@@ -1,5 +1,5 @@
 ================================================================================
-Changes in CoMetGeNe version 1.2
+Changes in CoMetGeNe version 1.2 (November 2018)
 ================================================================================
 
 * The number of threads on which CoMetGeNe is ran is now configuable in 
@@ -8,7 +8,7 @@ Changes in CoMetGeNe version 1.2
 
 
 ================================================================================
-Changes in CoMetGeNe version 1.1
+Changes in CoMetGeNe version 1.1 (October 2018)
 ================================================================================
 
 * Enzyme-coding information is retrieved from KEGG (may be used for statistics).
