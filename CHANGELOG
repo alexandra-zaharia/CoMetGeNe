@@ -1,4 +1,13 @@
 ================================================================================
+Changes in CoMetGeNe version 1.2
+================================================================================
+
+* The number of threads on which CoMetGeNe is ran is now configuable in 
+  CoMetGeNe_launcher.py through the variable n_thr_cometgene (by default, it is
+  initialized to the maximum number of available threads).
+
+
+================================================================================
 Changes in CoMetGeNe version 1.1
 ================================================================================
 
