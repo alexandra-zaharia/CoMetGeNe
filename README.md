@@ -6,7 +6,7 @@ A bioinformatics tool for the exploration of **Co**nserved **Met**abolic and **G
 
 Project website: [cometgene.lri.fr](https://cometgene.lri.fr)
 
-Publication (under review): Zaharia, Labedan, Froidevaux, Denise. CoMetGeNe: mining conserved neighborhood patterns in metabolic and genomic contexts. 2018 
+Publication: Zaharia A, Labedan B, Froidevaux C, Denise A. CoMetGeNe: mining conserved neighborhood patterns in metabolic and genomic contexts. *BMC Bioinformatics*. 2019; 20:19. DOI: [10.1186/s12859-018-2542-2](https://doi.org/10.1186/s12859-018-2542-2).
 
 ## Background
 
@@ -181,9 +181,8 @@ From the table above, it can be seen that:
 ## Requirements
 
 * Python 2.7
-* cPickle (Python library)
-* [lxml](http://lxml.de) (Python library)
-* [NetworkX](https://networkx.github.io) (Python library)
+* [lxml](http://lxml.de) (>= 3.5.0)
+* [NetworkX](https://networkx.github.io) (>= 1.10, <= 2.2)
 * Active internet connection (necessary for automatic data retrieval from KEGG)
 * Multi-core CPU (recommended)
 
