@@ -32,7 +32,9 @@ Roughly speaking, a **trail** is a path in a graph that can include repeated ver
 1. the genes involved in the reactions of *T* are neighbors, and
 1. no other trail *T'* passing trhough (*r<sub>i</sub>*, *r<sub>j</sub>*) such that the genes involved in reactions of *T'* are neighbors contains more unique reactions than *T*.
 
-Property 2 above refers to a concept termed **span**: the span of a trail *T* represents the number of unique reactions in *T*.
+Property **1** above assumes by default that only genes on the same strand of a given chromosome should be considered neighbors. If it is intended to allow for gene neighborhoods to take into account both strands, the `-b` (or `--both-strands`) option can be used.
+
+Property **2** above refers to a concept termed **span**: the span of a trail *T* represents the number of unique reactions in *T*.
 
 Flexibility is allowed in the definition of neighborhood: `CoMetGeNe` is able to skip a few reactions and/or genes.
 
