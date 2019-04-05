@@ -96,6 +96,14 @@ in the output file 'eco.out'.
              "specified directory (DIR)"
     )
 
+    parser.add_argument(
+        '--both-strands', '-b',
+        action='store_true',
+        help="considers neighboring genes on both strands of a given " +
+             "chromosome (by default, only genes located on a single strand " +
+             "are considered neighbors)"
+    )
+
     return parser.parse_args()
 
 

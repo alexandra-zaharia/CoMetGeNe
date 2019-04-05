@@ -36,15 +36,20 @@ def build_undirected_graph(args):
     chr_list = set()
     for gene_id in genomes[args.ORG]:
         chr_list.add(genomes[args.ORG][gene_id]['chr'])
-    return build_gene_graph(genomes[args.ORG], list(chr_list))
+    return build_gene_graph(genomes[args.ORG], list(chr_list),
+                            args.both_strands)
 
 
-def build_gene_graph(gene_data, chromosomes):
+def build_gene_graph(gene_data, chromosomes, both_strands=False):
     """Builds and returns an undirected graph representing gene neighborhood.
 
     :param gene_data: dict storing chromosome name, strand, and gene position,
         for every gene in the dict
     :param chromosomes: list of chromosome names
+    :param both_strands: bool specifying whether genes on both strands of a
+        given chromosome should be considered neighbors (if set to True) or only
+        genes on a single strand should be considered neighbors (if set to
+        False)
     :return: undirected graph representing gene neighborhood
     """
 
@@ -53,32 +58,68 @@ def build_gene_graph(gene_data, chromosomes):
         G.add_node(gene)
 
     for chromosome in chromosomes:
-        # Find out which genes are located on this chromosome on both the direct
-        # ('genes_fwd') and the reverse ('genes_rev') strands.
-        genes_fwd = list()
-        genes_rev = list()
-        for gene in gene_data:
-            if gene_data[gene]['chr'] == chromosome:
-                if gene_data[gene]['fwd']:
-                    genes_fwd.append(gene)
-                else:
-                    genes_rev.append(gene)
-
-        # Add edges to G by linking neighboring genes.
-        genes_fwd = sorted(genes_fwd, key=lambda(g): gene_data[g]['pos'])
-        genes_rev = sorted(genes_rev, key=lambda(g): gene_data[g]['pos'])
-
-        for genes in genes_fwd, genes_rev:
-            for i in range(1, len(genes)):
-                G.add_edge(genes[i], genes[i-1])
-            if len(genes) > 1:
-                if len(gene_data[genes[-1]]['pos']) > 1:
-                    start = gene_data[genes[-1]]['pos'][0][0]
-                    end = gene_data[genes[-1]]['pos'][-1][1]
-                    if start > end:
-                        G.add_edge(genes[0], genes[-1])
+        genes = _get_genes_on_chromosome(gene_data, chromosome, both_strands)
+        if both_strands:
+            _add_genes_to_G(G, genes, gene_data)
+        else:
+            for genes_per_strand in genes:
+                _add_genes_to_G(G, genes_per_strand, gene_data)
 
     return G
+
+
+def _get_genes_on_chromosome(gene_data, chromosome, both_strands):
+    """Determines the genes located on the specified chromosome.
+
+    Returns either two lists of genes (one for each strand of 'chromosome') if
+    both_strands is set to False, or one list of genes (for the genes located on
+    both strands of 'chromosome') if both_strands is set to True.
+
+    :param gene_data: dict storing chromosome name, strand, and gene position,
+        for every gene in the dict
+    :param chromosome: name of a given chromosome
+    :param both_strands: bool specifying whether genes on both strands of a
+        given chromosome should be considered neighbors (if set to True) or only
+        genes on a single strand should be considered neighbors (if set to
+        False)
+    :return: tuple of lists of genes (if both_strands is False) or list of genes
+        (if both_strands is True)
+    """
+    genes = list()
+
+    for gene in gene_data:
+        if gene_data[gene]['chr'] == chromosome:
+            genes.append(gene)
+
+    genes = sorted(genes, key=lambda(g): gene_data[g]['pos'])
+
+    if both_strands:
+        return genes
+
+    genes_fwd = [gene for gene in genes if gene_data[gene]['fwd']]
+    genes_rev = [gene for gene in genes if gene not in genes_fwd]
+
+    return genes_fwd, genes_rev
+
+
+def _add_genes_to_G(G, genes, gene_data):
+    """Adds the specified list fo genes to the graph G representing gene
+    neighborhood.
+
+    :param G: undirected graph representing gene neighborhood
+    :param genes: list of genes to add to G
+    :param gene_data: dict storing chromosome name, strand, and gene position,
+        for every gene in the dict
+    """
+    for i in range(1, len(genes)):
+        G.add_edge(genes[i], genes[i-1])
+
+    if len(genes) > 1:
+        if len(gene_data[genes[-1]]['pos']) > 1:
+            start = gene_data[genes[-1]]['pos'][0][0]
+            end = gene_data[genes[-1]]['pos'][-1][1]
+            if start > end:
+                G.add_edge(genes[0], genes[-1])
 
 
 def add_edges_to_G(G_init, reactions, delta_G=0):

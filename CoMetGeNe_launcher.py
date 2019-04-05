@@ -17,6 +17,7 @@ from trail.finding.kegg_import import download_kgml, retrieve_genome_info, \
     retrieve_ec_numbers
 from trail.utils import create_directory, unpickle, pickle
 
+
 ################################################################################
 #           Configure the following variables to your liking
 ################################################################################
@@ -33,6 +34,8 @@ org_codes = [
 
 delta_genes_max = 3  # maximum number of genes that can be skipped
 delta_reactions_max = 3  # maximum number of reactions that can be skipped
+
+both_strands = False  # should genes on both strands be considered neighbors?
 
 # This is the directory where metabolic pathways are stored. For each of the
 # species in the list 'org_codes', a subdirectory with the same name (three- or
@@ -58,9 +61,11 @@ kegg_max_thr_gen = 2
 # maximum number of available threads).
 n_thr_cometgene = multiprocessing.cpu_count()
 
+
 ################################################################################
 #               CoMetGeNe launcher script for parallel execution
 ################################################################################
+
 def retrieve_pathways():
     """Retrieves metabolic pathways from KEGG for every species in the data set.
 
@@ -126,6 +131,8 @@ def run_CoMetGeNe():
                     '-dG', str(delta_G),
                     '-dD', str(delta_D),
                     '-o', output]
+                if both_strands:
+                    CoMetGeNe.append('-b')
                 print ' '.join(CoMetGeNe)
                 pool.apply_async(subprocess.call, (CoMetGeNe,))
 
